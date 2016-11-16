@@ -250,6 +250,7 @@ class StandardRobot(Robot):
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
+        self.room.cleanTileAtPosition(self.pos)
 
         if (self.pos.getX() - self.speed <= 0 or
             self.pos.getX() + self.speed >= self.room.width or
@@ -268,7 +269,7 @@ class StandardRobot(Robot):
         self.pos = delta_pos
                 
 # Uncomment this line to see your implementation of StandardRobot in action!
-testRobotMovement(StandardRobot, RectangularRoom)
+#testRobotMovement(StandardRobot, RectangularRoom)
 
 
 # === Problem 4
@@ -290,10 +291,30 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
     robot_type: class of robot to be instantiated (e.g. StandardRobot or
                 RandomWalkRobot)
     """
-    raise NotImplementedError
+    trial_results = []
+    # instantiate robot:
 
+    
+    for trial in range(num_trials):
+        room = RectangularRoom(width, height)
+        robot = robot_type(room, speed)
+        percentage_cleaned = 0
+        clock_tick = 0
+        
+        while True:
+            percentage_cleaned = ( room.getNumCleanedTiles() / room.getNumTiles()) 
+            
+            if percentage_cleaned >= min_coverage:
+                break
+            else:
+                clock_tick +=1
+                robot.updatePositionAndClean()
+        trial_results.append(clock_tick)        
+        
+    mean_cleaning_time = round( sum( trial_results ) / num_trials, 2)
+    return mean_cleaning_time    
 # Uncomment this line to see how much your simulation takes on average
-##print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
 
 
 # === Problem 5
