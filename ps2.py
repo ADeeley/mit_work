@@ -321,13 +321,6 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
     mean_cleaning_time = round( sum( trial_results ) / num_trials, 2)
     return mean_cleaning_time    
 #Uncomment this line to see how much your simulation takes on average
-# print("Mean time taken to clean 100% of a 5x5 room: ", runSimulation(1, 1.0, 5, 5, 0.75, 30, StandardRobot))
-# print("Mean time taken to clean 75% of a  10x10 room: ", runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
-# print("Mean time taken to clean 90% 10x10 room: ", runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
-# print("Mean time taken to clean 100% 20x20 room: ", runSimulation(1, 1.0, 20, 20, 0.75, 30, StandardRobot))
-# print("Mean time taken for two robots to clean 100% of a 20x20 room: ", runSimulation(2, 1.0, 20, 20, 0.75, 30, StandardRobot))
-# print("Mean time taken for three robots to clean 100% of a 20x20 room: ", runSimulation(3, 1.0, 20, 20, 0.75, 30, StandardRobot))
-print("Mean time taken for seven robots to clean 100% of a 20x20 room: ", runSimulation(7, 1.0, 20, 20, 0.75, 30, StandardRobot))
 
 
 
@@ -344,7 +337,49 @@ class RandomWalkRobot(Robot):
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
-        raise NotImplementedError
+        self.direction = random.uniform(0, 357) # updates direction initially
+        self.room.cleanTileAtPosition(self.pos)
+        
+        # -- check if the robot could be out of bounds on the next turn
+        if (self.pos.getX() - self.speed <= 0 or
+            self.pos.getX() + self.speed >= self.room.width or
+            self.pos.getY() - self.speed <= 0 or
+            self.pos.getY() + self.speed >= self.room.height):
+                
+                # -- checks for a suitable direction
+                good_direction = False               
+                while not good_direction: # 
+                    self.direction = random.uniform(0,359)
+                    delta_pos = self.pos.getNewPosition(self.direction, self.speed)
+                    if self.room.isPositionInRoom(delta_pos):
+                        good_direction = True 
+                self.pos = delta_pos
+        else:
+            delta_pos = self.pos.getNewPosition(self.direction, self.speed)
+            self.pos = delta_pos
+
+            
+print("Random bot: Mean time taken to clean 100% of a 5x5 room: ", runSimulation(1, 1.0, 5, 5, 0.75, 30, RandomWalkRobot))
+print("Mean time taken to clean 100% of a 5x5 room: ", runSimulation(1, 1.0, 5, 5, 0.75, 30, StandardRobot))
+
+print("Random bot: Mean time taken to clean 75% of a  10x10 room: ", runSimulation(1, 1.0, 10, 10, 0.75, 30, RandomWalkRobot))
+print("Mean time taken to clean 75% of a  10x10 room: ", runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+
+print("Random bot: Mean time taken to clean 90% 10x10 room: ", runSimulation(1, 1.0, 10, 10, 0.75, 30, RandomWalkRobot))
+print("Mean time taken to clean 90% 10x10 room: ", runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+
+print("Random bot: Mean time taken to clean 100% 20x20 room: ", runSimulation(1, 1.0, 20, 20, 0.75, 30, RandomWalkRobot))
+print("Mean time taken to clean 100% 20x20 room: ", runSimulation(1, 1.0, 20, 20, 0.75, 30, StandardRobot))
+
+print("Random bot: Mean time taken for two robots to clean 100% of a 20x20 room: ", runSimulation(2, 1.0, 20, 20, 0.75, 30, RandomWalkRobot))
+print("Mean time taken for two robots to clean 100% of a 20x20 room: ", runSimulation(2, 1.0, 20, 20, 0.75, 30, StandardRobot))
+
+print("Random bot: Mean time taken for three robots to clean 100% of a 20x20 room: ", runSimulation(3, 1.0, 20, 20, 0.75, 30, RandomWalkRobot))
+print("Mean time taken for three robots to clean 100% of a 20x20 room: ", runSimulation(3, 1.0, 20, 20, 0.75, 30, StandardRobot))
+
+print("Random bot: Mean time taken for seven robots to clean 100% of a 20x20 room: ", runSimulation(7, 1.0, 20, 20, 0.75, 30, RandomWalkRobot))
+print("Mean time taken for seven robots to clean 100% of a 20x20 room: ", runSimulation(7, 1.0, 20, 20, 0.75, 30, StandardRobot))
+
 
 
 def showPlot1(title, x_label, y_label):
