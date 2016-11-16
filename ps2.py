@@ -314,7 +314,12 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
     mean_cleaning_time = round( sum( trial_results ) / num_trials, 2)
     return mean_cleaning_time    
 # Uncomment this line to see how much your simulation takes on average
-print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+print("Mean time taken to clean 100% of a 5x5 room: ", runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+print("Mean time taken to clean 75% of a  10x10 room: ", runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+print("Mean time taken to clean 90% 10x10 room: ", runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+print("Mean time taken to clean 100% 20x20 room: ", runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+print("Mean time taken for three robots to clean 100% of a 20x20 room: ", runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+
 
 
 # === Problem 5
